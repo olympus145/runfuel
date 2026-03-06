@@ -1,0 +1,143 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  output          = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  weeklyRunMilesGoal  Float?
+  weeklyBikeMilesGoal Float?
+  strengthDaysGoal    Int?
+  coreDaysGoal        Int?
+  dailyCalorieGoal    Int?
+  dailyProteinGoal    Int?
+  dailyCarbsGoal      Int?
+  dailyFatGoal        Int?
+  weightGoal          Float?
+  currentWeight       Float?
+
+  corosAccessToken    String?
+  corosRefreshToken   String?
+  corosTokenExpiry    DateTime?
+  corosUserId         String?
+
+  runs            Run[]
+  bikes           Bike[]
+  strengthLogs    StrengthLog[]
+  mealLogs        MealLog[]
+  coachingLogs    CoachingLog[]
+  weightLogs      WeightLog[]
+}
+
+model Run {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  corosActivityId String?   @unique
+  date            DateTime
+  name            String?
+  type            String    @default("run")
+  distanceMiles   Float
+  durationSeconds Int
+  avgPaceSecMile  Float?
+  avgHeartRate    Int?
+  maxHeartRate    Int?
+  elevationFt     Float?
+  calories        Int?
+  trainingLoad    Float?
+  vo2max          Float?
+  aerobicEffect   Float?
+  anaerobicEffect Float?
+  cadence         Int?
+  hrv             Int?
+  recoveryTime    Int?
+  splits          String?
+  createdAt       DateTime  @default(now())
+}
+
+model Bike {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  corosActivityId String?   @unique
+  date            DateTime
+  name            String?
+  type            String    @default("bike")
+  distanceMiles   Float
+  durationSeconds Int
+  avgSpeedMph     Float?
+  avgHeartRate    Int?
+  maxHeartRate    Int?
+  elevationFt     Float?
+  calories        Int?
+  avgPower        Int?
+  cadenceRpm      Int?
+  trainingLoad    Float?
+  createdAt       DateTime  @default(now())
+}
+
+model StrengthLog {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  date        DateTime
+  type        String
+  durationMin Int?
+  notes       String?
+  exercises   String?
+  createdAt   DateTime  @default(now())
+}
+
+model MealLog {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  date        DateTime
+  mealType    String
+  name        String
+  calories    Int
+  proteinG    Float?
+  carbsG      Float?
+  fatG        Float?
+  notes       String?
+  createdAt   DateTime  @default(now())
+}
+
+model WeightLog {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  date          DateTime
+  weightLbs     Float
+  bodyFatPct    Float?
+  hrvScore      Int?
+  sleepHrs      Float?
+  restingHr     Int?
+  recoveryScore Int?
+  createdAt     DateTime  @default(now())
+}
+
+model CoachingLog {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  date           DateTime
+  feedback       String
+  highlights     String?
+  runScore       Int?
+  nutritionScore Int?
+  recoveryScore  Int?
+  overallScore   Int?
+  focusArea      String?
+  createdAt      DateTime  @default(now())
+}
