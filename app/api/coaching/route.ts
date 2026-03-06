@@ -46,8 +46,9 @@ export async function POST(req: NextRequest) {
   ]);
 
   // Build week summary
-  const avgV02maxRuns = runs.filter((r) => r.vo2max);
-  const avgHrvRuns = runs.filter((r) => r.hrv);
+  type RunRow = (typeof runs)[0];
+  const avgV02maxRuns = runs.filter((r: RunRow) => r.vo2max);
+  const avgHrvRuns = runs.filter((r: RunRow) => r.hrv);
 
   const week = {
     runs: runs.map((r) => ({

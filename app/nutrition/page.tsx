@@ -629,7 +629,7 @@ export default function Nutrition() {
                           if (!active || !payload?.length) return null;
                           return (
                             <div className="bg-[#0f0f0f] border border-[#252525] rounded-xl px-3 py-2.5">
-                              <p className="text-[10px] text-[#555] mb-1">{label ? fmtDate(label.slice(0, 10), range) : ""}</p>
+                              <p className="text-[10px] text-[#555] mb-1">{label ? fmtDate(String(label).slice(0, 10), range) : ""}</p>
                               <p className="text-[13px] font-bold text-[#c084fc]">{Number(payload[0].value).toFixed(1)} lbs</p>
                             </div>
                           );
