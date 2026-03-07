@@ -18,7 +18,7 @@ export default function Bikes() {
   const [form, setForm] = useState({ date: new Date().toISOString().slice(0, 10), name: "", type: "bike", distanceMiles: "", durationMin: "", avgHr: "", elevationFt: "", calories: "" });
 
   useEffect(() => {
-    fetch("/api/bikes?limit=50").then(r => r.json()).then(d => { setRides(d || []); setLoading(false); });
+    fetch("/api/bikes?limit=50").then(r => r.json()).then(d => { setRides(d || []); }).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   async function addRide() {

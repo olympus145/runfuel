@@ -23,7 +23,7 @@ export default function Runs() {
   const [form, setForm] = useState({ date: new Date().toISOString().slice(0, 10), name: "", type: "run", distanceMiles: "", durationMin: "", avgHr: "", elevationFt: "", calories: "" });
 
   useEffect(() => {
-    fetch("/api/runs?limit=50").then(r => r.json()).then(d => { setRuns(d || []); setLoading(false); });
+    fetch("/api/runs?limit=50").then(r => r.json()).then(d => { setRuns(d || []); }).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   async function addRun() {

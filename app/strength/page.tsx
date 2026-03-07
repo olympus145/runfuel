@@ -24,7 +24,7 @@ export default function Strength() {
   const [form, setForm] = useState({ date: new Date().toISOString().slice(0, 10), type: "strength", durationMin: "", notes: "" });
 
   useEffect(() => {
-    fetch("/api/strength?weeks=8").then(r => r.json()).then(d => { setLogs(d || []); setLoading(false); });
+    fetch("/api/strength?weeks=8").then(r => r.json()).then(d => { setLogs(d || []); }).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   async function addLog() {

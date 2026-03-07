@@ -162,8 +162,7 @@ export default function Dashboard() {
       const cal = (n || []).reduce((a: number, m: { calories: number }) => a + m.calories, 0);
       const prot = (n || []).reduce((a: number, m: { proteinG: number | null }) => a + (m.proteinG ?? 0), 0);
       setNutrition({ calories: cal, protein: Math.round(prot) });
-      setLoading(false);
-    });
+    }).catch(console.error).finally(() => setLoading(false));
   }, [today]);
 
   async function handleSync() {

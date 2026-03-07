@@ -47,8 +47,7 @@ export default function Coaching() {
       const valid = results.filter(Boolean).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       setLogs(valid);
       if (valid.length > 0) setSelected(valid[0]);
-      setLoading(false);
-    });
+    }).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   async function generateCoaching() {
