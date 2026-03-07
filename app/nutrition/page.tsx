@@ -70,7 +70,7 @@ function RangeSelector({ value, onChange }: { value: RangeLabel; onChange: (r: R
           className={`px-3 py-1.5 rounded-lg text-[11px] font-medium tracking-wide transition-all ${
             value === r.label
               ? "bg-[#161616] text-white border border-[#252525]"
-              : "text-[#383838] hover:text-[#666]"
+              : "text-[#666] hover:text-[#666]"
           }`}>
           {r.label}
         </button>
@@ -255,7 +255,7 @@ export default function Nutrition() {
   const weightGoalLbs = user?.weightGoal ?? null;
 
   return (
-    <div className="px-4 pt-6 pb-4 md:px-8 md:pt-10 max-w-4xl mx-auto">
+    <div className="px-4 pt-8 pb-6 md:px-8 md:pt-12 max-w-4xl mx-auto">
 
       {/* ── Header ── */}
       <div className="flex items-start justify-between mb-6 gap-3">
@@ -268,14 +268,14 @@ export default function Nutrition() {
             <input type="date" value={date} onChange={e => setDate(e.target.value)}
               className="text-sm !w-auto !px-3 !py-1.5 !rounded-xl" />
             <button onClick={() => setShowAdd(!showAdd)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#0f0f0f] text-[#555] hover:text-[#888] hover:bg-[#151515] border border-[#1a1a1a] text-sm transition-colors whitespace-nowrap">
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#111] text-[#777] hover:text-[#aaa] hover:bg-[#181818] border border-[#1a1a1a] text-sm transition-colors whitespace-nowrap">
               <Plus size={14} /> <span className="hidden sm:inline">Add</span>
             </button>
           </div>
         )}
         {tab === "weight" && (
           <button onClick={() => setShowWeightAdd(!showWeightAdd)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#0f0f0f] text-[#555] hover:text-[#888] hover:bg-[#151515] border border-[#1a1a1a] text-sm transition-colors flex-shrink-0">
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#111] text-[#777] hover:text-[#aaa] hover:bg-[#181818] border border-[#1a1a1a] text-sm transition-colors flex-shrink-0">
             <Plus size={14} /> <span className="hidden sm:inline">Log Weight</span>
           </button>
         )}
@@ -286,7 +286,7 @@ export default function Nutrition() {
         {(["daily", "trends", "weight"] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
             className={`px-4 py-2 rounded-lg text-[12px] font-medium tracking-wide capitalize transition-all ${
-              tab === t ? "bg-[#161616] text-white border border-[#252525]" : "text-[#383838] hover:text-[#666]"
+              tab === t ? "bg-[#161616] text-white border border-[#252525]" : "text-[#666] hover:text-[#666]"
             }`}>
             {t}
           </button>
@@ -301,12 +301,12 @@ export default function Nutrition() {
             {/* Calories In */}
             <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-4 md:col-span-1">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[9px] tracking-[0.2em] text-[#333] uppercase">Calories In</span>
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase">Calories In</span>
                 <Flame size={13} color="#c8a96e" />
               </div>
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-[26px] font-bold text-white leading-none">{totalCal}</span>
-                {calGoal > 0 && <span className="text-xs text-[#333]">/ {calGoal}</span>}
+                {calGoal > 0 && <span className="text-xs text-[#666]">/ {calGoal}</span>}
               </div>
               {calGoal > 0 && (
                 <ProgressBar value={totalCal} max={calGoal}
@@ -317,14 +317,14 @@ export default function Nutrition() {
             {/* Calories Burned */}
             <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[9px] tracking-[0.2em] text-[#333] uppercase">Burned</span>
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase">Burned</span>
                 <Activity size={13} color="#4a7c59" />
               </div>
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-[26px] font-bold text-white leading-none">{todayBurned}</span>
-                <span className="text-xs text-[#333]">kcal</span>
+                <span className="text-xs text-[#666]">kcal</span>
               </div>
-              <p className="text-[10px] text-[#2a2a2a]">from activities today</p>
+              <p className="text-[10px] text-[#666]">from activities today</p>
             </div>
 
             {/* Net Calories */}
@@ -336,7 +336,7 @@ export default function Nutrition() {
                 : "border-[#ef4444]/15 bg-[#ef4444]/5"
             }`}>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[9px] tracking-[0.2em] text-[#333] uppercase">Net Calories</span>
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase">Net Calories</span>
                 {netCalories < 0
                   ? <TrendingDown size={13} color="#4a7c59" />
                   : <TrendingUp size={13} color={netCalories > 0 ? "#ef4444" : "#555"} />
@@ -348,9 +348,9 @@ export default function Nutrition() {
                 }`}>
                   {netCalories > 0 ? `+${netCalories}` : netCalories}
                 </span>
-                <span className="text-xs text-[#333]">kcal</span>
+                <span className="text-xs text-[#666]">kcal</span>
               </div>
-              <p className="text-[10px] text-[#2a2a2a]">
+              <p className="text-[10px] text-[#666]">
                 {netCalories < 0 ? `${Math.abs(netCalories)} kcal deficit` : netCalories > 0 ? "caloric surplus" : "balanced"}
               </p>
             </div>
@@ -358,13 +358,13 @@ export default function Nutrition() {
             {/* Protein */}
             <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[9px] tracking-[0.2em] text-[#333] uppercase">Protein</span>
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase">Protein</span>
                 <Bike size={13} color="#a855f7" />
               </div>
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-[26px] font-bold text-white leading-none">{Math.round(totalProtein)}</span>
-                {protGoal > 0 && <span className="text-xs text-[#333]">/ {protGoal}g</span>}
-                {!protGoal && <span className="text-xs text-[#333]">g</span>}
+                {protGoal > 0 && <span className="text-xs text-[#666]">/ {protGoal}g</span>}
+                {!protGoal && <span className="text-xs text-[#666]">g</span>}
               </div>
               {protGoal > 0 && <ProgressBar value={totalProtein} max={protGoal} color="#a855f7" />}
             </div>
@@ -372,7 +372,7 @@ export default function Nutrition() {
 
           {/* Macros breakdown */}
           <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-5 mb-5">
-            <p className="text-[9px] tracking-[0.25em] text-[#2e2e2e] uppercase mb-4">Macros Today</p>
+            <p className="text-[9px] tracking-[0.25em] text-[#666] uppercase mb-4">Macros Today</p>
             <div className="grid grid-cols-3 gap-5">
               {[
                 { label: "Protein", value: totalProtein, goal: protGoal, unit: "g", color: "#a855f7" },
@@ -381,10 +381,10 @@ export default function Nutrition() {
               ].map(({ label, value, goal, unit, color }) => (
                 <div key={label}>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] tracking-[0.1em] text-[#333] uppercase">{label}</span>
+                    <span className="text-[10px] tracking-[0.1em] text-[#666] uppercase">{label}</span>
                     <span className="text-sm font-semibold text-white">
                       {value.toFixed(0)}{unit}
-                      {goal > 0 && <span className="text-[#2e2e2e] font-normal"> / {goal}</span>}
+                      {goal > 0 && <span className="text-[#666] font-normal"> / {goal}</span>}
                     </span>
                   </div>
                   {goal > 0 && <ProgressBar value={value} max={goal} color={color} />}
@@ -396,7 +396,7 @@ export default function Nutrition() {
           {/* Add meal form */}
           {showAdd && (
             <div className="rounded-2xl border border-[#252525] bg-[#0c0c0c] p-5 mb-5">
-              <p className="text-[9px] tracking-[0.2em] text-[#2e2e2e] uppercase mb-4">Add Food</p>
+              <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">Add Food</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                 <div><label className="Field-label">Meal type</label>
                   <select value={form.mealType} onChange={e => setForm({ ...form, mealType: e.target.value })}>
@@ -415,7 +415,7 @@ export default function Nutrition() {
               </div>
               <div className="flex gap-2">
                 <button onClick={addMeal} className="px-4 py-2 rounded-xl bg-[#c8a96e]/15 text-[#c8a96e] hover:bg-[#c8a96e]/25 border border-[#c8a96e]/20 text-sm transition-all active:scale-95">Save</button>
-                <button onClick={() => setShowAdd(false)} className="px-4 py-2 rounded-xl text-[#333] hover:text-[#555] text-sm">Cancel</button>
+                <button onClick={() => setShowAdd(false)} className="px-4 py-2 rounded-xl text-[#777] hover:text-[#aaa] text-sm">Cancel</button>
               </div>
             </div>
           )}
@@ -431,22 +431,22 @@ export default function Nutrition() {
                   <div className="px-5 py-3 flex items-center justify-between border-b border-[#0f0f0f]">
                     <div className="flex items-center gap-2.5">
                       <div className="w-2 h-2 rounded-full" style={{ backgroundColor: MEAL_COLORS[type] }} />
-                      <span className="text-[10px] font-medium text-[#555] uppercase tracking-wider">{type}</span>
+                      <span className="text-[10px] font-medium text-[#888] uppercase tracking-wider">{type}</span>
                     </div>
-                    <span className="text-[11px] text-[#2e2e2e]">{typeCal} kcal</span>
+                    <span className="text-[11px] text-[#777]">{typeCal} kcal</span>
                   </div>
                   {typeMeals.map(meal => (
                     <div key={meal.id} className="px-5 py-3 flex items-center justify-between hover:bg-[#0f0f0f] transition-colors">
                       <div className="flex-1 min-w-0">
                         <p className="text-[13px] text-[#bbb] truncate">{meal.name}</p>
-                        <div className="flex items-center gap-3 mt-0.5 text-[11px] text-[#333]">
+                        <div className="flex items-center gap-3 mt-0.5 text-[11px] text-[#777]">
                           <span>{meal.calories} kcal</span>
                           {meal.proteinG && <span>{meal.proteinG.toFixed(0)}g protein</span>}
                           {meal.carbsG && <span>{meal.carbsG.toFixed(0)}g carbs</span>}
                           {meal.fatG && <span>{meal.fatG.toFixed(0)}g fat</span>}
                         </div>
                       </div>
-                      <button onClick={() => deleteMeal(meal.id)} className="text-[#222] hover:text-[#ef4444] transition-all ml-3 flex-shrink-0">
+                      <button onClick={() => deleteMeal(meal.id)} className="text-[#666] hover:text-[#ef4444] transition-all ml-3 flex-shrink-0">
                         <Trash2 size={14} />
                       </button>
                     </div>
@@ -455,7 +455,7 @@ export default function Nutrition() {
               );
             })}
             {meals.length === 0 && (
-              <p className="text-[#222] text-[13px] py-10 text-center">No meals logged for this day.</p>
+              <p className="text-[#555] text-[13px] py-10 text-center">No meals logged for this day.</p>
             )}
           </div>
         </div>
@@ -465,13 +465,13 @@ export default function Nutrition() {
       {tab === "trends" && (
         <div>
           <div className="flex items-center justify-between mb-6">
-            <p className="text-[10px] tracking-[0.25em] text-[#2e2e2e] uppercase">Calorie Balance</p>
+            <p className="text-[10px] tracking-[0.25em] text-[#666] uppercase">Calorie Balance</p>
             <RangeSelector value={range} onChange={r => setRange(r)} />
           </div>
 
           {statsLoading ? (
             <div className="flex items-center justify-center py-20">
-              <RotateCcw size={16} className="text-[#333] animate-spin" />
+              <RotateCcw size={16} className="text-[#666] animate-spin" />
             </div>
           ) : (
             <>
@@ -484,18 +484,18 @@ export default function Nutrition() {
                   { label: avgNet < 0 ? "Total Deficit" : "Total Surplus", value: avgNet < 0 ? totalDeficit : totalSurplus, unit: "kcal", color: avgNet < 0 ? "#7ab88a" : "#f87171" },
                 ].map(({ label, value, unit, color }) => (
                   <div key={label} className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-4">
-                    <p className="text-[9px] tracking-[0.2em] text-[#333] uppercase mb-2">{label}</p>
+                    <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-2">{label}</p>
                     <p className="text-[22px] font-bold leading-none" style={{ color }}>
                       {value > 0 && label.includes("Net") ? `+${value}` : value}
                     </p>
-                    <p className="text-[10px] text-[#2a2a2a] mt-0.5">{unit}</p>
+                    <p className="text-[10px] text-[#666] mt-0.5">{unit}</p>
                   </div>
                 ))}
               </div>
 
               {/* Calorie balance area chart */}
               <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-5 mb-4">
-                <p className="text-[9px] tracking-[0.2em] text-[#2e2e2e] uppercase mb-5">Calories In vs. Burned</p>
+                <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-5">Calories In vs. Burned</p>
                 <ResponsiveContainer width="100%" height={180}>
                   <AreaChart data={chartData} margin={{ top: 5, right: 5, bottom: 0, left: -20 }}>
                     <defs>
@@ -523,8 +523,8 @@ export default function Nutrition() {
 
               {/* Net calories bar chart (deficit/surplus) */}
               <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-5">
-                <p className="text-[9px] tracking-[0.2em] text-[#2e2e2e] uppercase mb-1">Net Calories (Deficit / Surplus)</p>
-                <p className="text-[10px] text-[#2a2a2a] mb-5">Green bars = deficit (burned more than consumed)</p>
+                <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-1">Net Calories (Deficit / Surplus)</p>
+                <p className="text-[10px] text-[#666] mb-5">Green bars = deficit (burned more than consumed)</p>
                 <ResponsiveContainer width="100%" height={160}>
                   <BarChart data={chartData} margin={{ top: 5, right: 5, bottom: 0, left: -20 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#111" />
@@ -540,7 +540,7 @@ export default function Nutrition() {
                     />
                   </BarChart>
                 </ResponsiveContainer>
-                <div className="flex items-center gap-4 mt-3 text-[10px] text-[#2a2a2a]">
+                <div className="flex items-center gap-4 mt-3 text-[10px] text-[#666]">
                   <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-[#4a7c59] inline-block" /> Deficit (negative = good)</span>
                   <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-[#ef4444] inline-block" /> Surplus (positive)</span>
                 </div>
@@ -554,14 +554,14 @@ export default function Nutrition() {
       {tab === "weight" && (
         <div>
           <div className="flex items-center justify-between mb-6">
-            <p className="text-[10px] tracking-[0.25em] text-[#2e2e2e] uppercase">Weight History</p>
+            <p className="text-[10px] tracking-[0.25em] text-[#666] uppercase">Weight History</p>
             <RangeSelector value={range} onChange={r => setRange(r)} />
           </div>
 
           {/* Add weight form */}
           {showWeightAdd && (
             <div className="rounded-2xl border border-[#252525] bg-[#0c0c0c] p-5 mb-5">
-              <p className="text-[9px] tracking-[0.2em] text-[#2e2e2e] uppercase mb-4">Log Weight</p>
+              <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">Log Weight</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
                 <div><label className="Field-label">Date</label>
                   <input type="date" value={weightForm.date} onChange={e => setWeightForm({ ...weightForm, date: e.target.value })} />
@@ -578,14 +578,14 @@ export default function Nutrition() {
                   className="px-4 py-2 rounded-xl bg-[#a855f7]/15 text-[#c084fc] hover:bg-[#a855f7]/25 border border-[#a855f7]/20 text-sm transition-all active:scale-95 disabled:opacity-40">
                   {savingWeight ? "Saving…" : "Save"}
                 </button>
-                <button onClick={() => setShowWeightAdd(false)} className="px-4 py-2 rounded-xl text-[#333] hover:text-[#555] text-sm">Cancel</button>
+                <button onClick={() => setShowWeightAdd(false)} className="px-4 py-2 rounded-xl text-[#777] hover:text-[#aaa] text-sm">Cancel</button>
               </div>
             </div>
           )}
 
           {weightLoading ? (
             <div className="flex items-center justify-center py-20">
-              <RotateCcw size={16} className="text-[#333] animate-spin" />
+              <RotateCcw size={16} className="text-[#666] animate-spin" />
             </div>
           ) : (
             <>
@@ -599,10 +599,10 @@ export default function Nutrition() {
                     { label: "Goal", value: weightGoalLbs ? `${weightGoalLbs.toFixed(1)}` : "—", unit: "lbs", color: "#c8a96e" },
                   ].map(({ label, value, unit, color }) => (
                     <div key={label} className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-4">
-                      <p className="text-[9px] tracking-[0.2em] text-[#333] uppercase mb-2">{label}</p>
+                      <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-2">{label}</p>
                       <div className="flex items-baseline gap-1">
                         <span className="text-[22px] font-bold leading-none" style={{ color }}>{value}</span>
-                        <span className="text-[10px] text-[#2a2a2a]">{unit}</span>
+                        <span className="text-[10px] text-[#666]">{unit}</span>
                       </div>
                     </div>
                   ))}
@@ -612,7 +612,7 @@ export default function Nutrition() {
               {/* Weight line chart */}
               {weightData.length >= 2 ? (
                 <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-5 mb-4">
-                  <p className="text-[9px] tracking-[0.2em] text-[#2e2e2e] uppercase mb-5">Weight Over Time</p>
+                  <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-5">Weight Over Time</p>
                   <ResponsiveContainer width="100%" height={220}>
                     <LineChart
                       data={downsample(weightData, 90)}
@@ -646,8 +646,8 @@ export default function Nutrition() {
                 </div>
               ) : (
                 <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-10 text-center mb-4">
-                  <Scale size={24} className="text-[#222] mx-auto mb-3" />
-                  <p className="text-[13px] text-[#2e2e2e]">Log at least 2 weigh-ins to see your trend.</p>
+                  <Scale size={24} className="text-[#555] mx-auto mb-3" />
+                  <p className="text-[13px] text-[#666]">Log at least 2 weigh-ins to see your trend.</p>
                 </div>
               )}
 
@@ -655,19 +655,19 @@ export default function Nutrition() {
               {weightData.length > 0 && (
                 <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] overflow-hidden">
                   <div className="px-5 py-3 border-b border-[#0f0f0f]">
-                    <p className="text-[9px] tracking-[0.2em] text-[#2e2e2e] uppercase">Log</p>
+                    <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase">Log</p>
                   </div>
                   <div className="divide-y divide-[#0f0f0f] max-h-72 overflow-y-auto">
                     {[...weightData].reverse().map(w => (
                       <div key={w.id} className="px-5 py-3 flex items-center justify-between hover:bg-[#0f0f0f] transition-colors">
                         <div>
                           <p className="text-[13px] font-medium text-[#bbb]">{w.weightLbs.toFixed(1)} lbs</p>
-                          <p className="text-[11px] text-[#2e2e2e] mt-0.5">
+                          <p className="text-[11px] text-[#666] mt-0.5">
                             {new Date(w.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
                             {w.bodyFatPct && ` · ${w.bodyFatPct}% BF`}
                           </p>
                         </div>
-                        <button onClick={() => deleteWeight(w.id)} className="text-[#222] hover:text-[#ef4444] transition-all ml-3">
+                        <button onClick={() => deleteWeight(w.id)} className="text-[#666] hover:text-[#ef4444] transition-all ml-3">
                           <Trash2 size={14} />
                         </button>
                       </div>

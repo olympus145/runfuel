@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { RefreshCw, TrendingUp, Activity, Utensils, Zap } from "lucide-react";
+import { RefreshCw, TrendingUp, Activity, Utensils, Zap, AlertCircle } from "lucide-react";
 
 interface CoachingLog {
   id: string; date: string; feedback: string; highlights: string | null;
@@ -24,7 +24,7 @@ function ScoreCircle({ score, label, color }: { score: number; label: string; co
           <span className="text-lg font-bold text-white">{score}</span>
         </div>
       </div>
-      <span className="text-[10px] text-[#444] tracking-[0.15em] uppercase">{label}</span>
+      <span className="text-[10px] text-[#777] tracking-[0.15em] uppercase">{label}</span>
     </div>
   );
 }
@@ -34,6 +34,7 @@ export default function Coaching() {
   const [selected, setSelected] = useState<CoachingLog | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const today = new Date().toISOString().slice(0, 10);
 
@@ -52,27 +53,43 @@ export default function Coaching() {
 
   async function generateCoaching() {
     setGenerating(true);
+    setError(null);
     try {
-      const res = await fetch("/api/coaching", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ date: today }) });
+      const res = await fetch("/api/coaching", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: today }),
+      });
       const log = await res.json();
-      if (!log.error) {
-        setLogs([log, ...logs.filter(l => l.date.slice(0, 10) !== today)]);
+      if (log.error) {
+        setError(log.error);
+      } else {
+        setLogs(prev => [log, ...prev.filter(l => l.date.slice(0, 10) !== today)]);
         setSelected(log);
       }
-    } finally { setGenerating(false); }
+    } catch {
+      setError("Network error — please try again.");
+    } finally {
+      setGenerating(false);
+    }
   }
 
   const todayLog = logs.find(l => l.date.slice(0, 10) === today);
 
-  if (loading) return <div className="flex items-center justify-center h-screen"><div className="text-[#333] text-sm tracking-widest uppercase animate-pulse">Loading</div></div>;
+  if (loading) return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="text-[#666] text-sm tracking-widest uppercase animate-pulse">Loading</div>
+    </div>
+  );
 
   return (
     <div className="px-4 pt-6 pb-4 md:px-8 md:pt-10 max-w-5xl mx-auto">
+      {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div>
           <p className="text-[10px] tracking-[0.3em] text-[#c8a96e] uppercase mb-1">AI Coaching</p>
           <h2 className="text-2xl font-bold text-white">Your Coach</h2>
-          <p className="text-sm text-[#444] mt-1">Powered by Claude · Learns from your history</p>
+          <p className="text-sm text-[#777] mt-1">Powered by Claude · Learns from your history</p>
         </div>
         <button onClick={generateCoaching} disabled={generating}
           className="flex items-center gap-2 px-4 py-2 rounded-md bg-[#c8a96e]/15 text-[#c8a96e] hover:bg-[#c8a96e]/25 border border-[#c8a96e]/20 text-sm transition-colors disabled:opacity-40">
@@ -81,14 +98,25 @@ export default function Coaching() {
         </button>
       </div>
 
+      {/* Error banner */}
+      {error && (
+        <div className="flex items-start gap-3 mb-6 rounded-xl border border-[#ef4444]/20 bg-[#ef4444]/8 px-4 py-3">
+          <AlertCircle size={15} className="text-[#f87171] mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="text-sm text-[#f87171]">{error}</p>
+            <p className="text-xs text-[#888] mt-0.5">Make sure ANTHROPIC_API_KEY is set in your Vercel environment variables.</p>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Log list */}
         <div className="col-span-1">
-          <h3 className="text-[10px] tracking-[0.2em] text-[#444] uppercase mb-3">History</h3>
+          <h3 className="text-[10px] tracking-[0.2em] text-[#666] uppercase mb-3">History</h3>
           {logs.length === 0 && (
             <div className="rounded-xl border border-[#1e1e1e] bg-[#0c0c0c] p-6 text-center">
-              <p className="text-sm text-[#444]">No coaching yet.</p>
-              <p className="text-xs text-[#333] mt-1">Generate your first session above.</p>
+              <p className="text-sm text-[#777]">No coaching yet.</p>
+              <p className="text-xs text-[#555] mt-1">Generate your first session above.</p>
             </div>
           )}
           <div className="space-y-1.5">
@@ -97,14 +125,14 @@ export default function Coaching() {
               const isSelected = selected?.id === log.id;
               return (
                 <button key={log.id} onClick={() => setSelected(log)}
-                  className={`w-full text-left rounded-lg border p-3.5 transition-all ${isSelected ? "border-[#c8a96e]/30 bg-[#c8a96e]/5" : "border-[#1a1a1a] bg-[#0c0c0c] hover:border-[#222]"}`}>
+                  className={`w-full text-left rounded-lg border p-3.5 transition-all ${isSelected ? "border-[#c8a96e]/30 bg-[#c8a96e]/5" : "border-[#1a1a1a] bg-[#0c0c0c] hover:border-[#282828]"}`}>
                   <div className="flex items-center justify-between">
                     <span className={`text-xs font-medium ${isSelected ? "text-[#c8a96e]" : "text-[#888]"}`}>
                       {isToday ? "Today" : new Date(log.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
                     </span>
-                    <span className={`text-sm font-bold ${isSelected ? "text-white" : "text-[#555]"}`}>{log.overallScore}</span>
+                    <span className={`text-sm font-bold ${isSelected ? "text-white" : "text-[#666]"}`}>{log.overallScore}</span>
                   </div>
-                  {log.focusArea && <p className="text-[10px] text-[#444] mt-1 capitalize tracking-wide">{log.focusArea}</p>}
+                  {log.focusArea && <p className="text-[10px] text-[#666] mt-1 capitalize tracking-wide">{log.focusArea}</p>}
                 </button>
               );
             })}
@@ -118,20 +146,20 @@ export default function Coaching() {
               {/* Date + focus */}
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <p className="text-[10px] tracking-[0.2em] text-[#444] uppercase">
+                  <p className="text-[10px] tracking-[0.2em] text-[#666] uppercase">
                     {selected.date.slice(0, 10) === today ? "Today" : new Date(selected.date).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
                   </p>
                   {selected.focusArea && (
                     <p className="text-sm text-[#c8a96e] mt-0.5 capitalize tracking-wide">{selected.focusArea} focus</p>
                   )}
                 </div>
-                <TrendingUp size={16} color="#444" />
+                <TrendingUp size={16} color="#555" />
               </div>
 
               {/* Scores */}
               <div className="flex items-center gap-6 pb-6 mb-6 border-b border-[#141414]">
                 <ScoreCircle score={selected.overallScore ?? 0} label="Overall" color="#c8a96e" />
-                <div className="w-px h-12 bg-[#141414]" />
+                <div className="w-px h-12 bg-[#1e1e1e]" />
                 <ScoreCircle score={selected.runScore ?? 0} label="Run" color="#4a7c59" />
                 <ScoreCircle score={selected.nutritionScore ?? 0} label="Nutrition" color="#3b82f6" />
                 <ScoreCircle score={selected.recoveryScore ?? 0} label="Recovery" color="#a855f7" />
@@ -143,10 +171,10 @@ export default function Coaching() {
                   const h: string[] = JSON.parse(selected.highlights);
                   return (
                     <div className="mb-6">
-                      <p className="text-[10px] tracking-[0.2em] text-[#444] uppercase mb-3">Key Points</p>
-                      <ul className="space-y-2">
+                      <p className="text-[10px] tracking-[0.2em] text-[#666] uppercase mb-3">Key Points</p>
+                      <ul className="space-y-2.5">
                         {h.map((item, i) => (
-                          <li key={i} className="flex items-start gap-2.5 text-sm text-[#888]">
+                          <li key={i} className="flex items-start gap-2.5 text-sm text-[#bbb]">
                             <span className="text-[#4a7c59] mt-0.5 flex-shrink-0">—</span>
                             {item}
                           </li>
@@ -159,26 +187,27 @@ export default function Coaching() {
 
               {/* Full feedback */}
               <div>
-                <p className="text-[10px] tracking-[0.2em] text-[#444] uppercase mb-3">Coaching Report</p>
-                <div className="text-sm text-[#888] leading-relaxed space-y-3">
+                <p className="text-[10px] tracking-[0.2em] text-[#666] uppercase mb-3">Coaching Report</p>
+                <div className="text-sm text-[#aaa] leading-relaxed space-y-3">
                   {selected.feedback.split("\n\n").map((para, i) => (
                     <p key={i}>{para}</p>
                   ))}
                 </div>
               </div>
 
-              <div className="mt-6 pt-5 border-t border-[#141414] flex items-center gap-2 text-[10px] text-[#333]">
+              <div className="mt-6 pt-5 border-t border-[#141414] flex items-center gap-2 text-[10px] text-[#555]">
                 <Zap size={10} /><span>Generated by Claude</span>
                 <span className="ml-auto">{new Date(selected.createdAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</span>
               </div>
             </div>
           ) : (
             <div className="rounded-xl border border-[#1e1e1e] bg-[#0c0c0c] p-12 text-center">
-              <div className="flex items-center justify-center gap-3 mb-4 text-[#333]">
+              <div className="flex items-center justify-center gap-3 mb-4 text-[#444]">
                 <Activity size={20} /><Utensils size={20} /><TrendingUp size={20} />
               </div>
-              <p className="text-sm text-[#444] mb-1">Your personal coach analyzes</p>
-              <p className="text-sm text-[#333]">running, cycling, strength, and nutrition together</p>
+              <p className="text-sm text-[#777] mb-1">Your personal coach analyzes</p>
+              <p className="text-sm text-[#555]">running, cycling, strength, and nutrition together</p>
+              <p className="text-xs text-[#444] mt-3">Click "Get Today&apos;s Coaching" to get started</p>
             </div>
           )}
         </div>

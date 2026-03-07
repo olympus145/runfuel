@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  try {
   const userId = getDefaultUserId();
   const body = await req.json();
   const date = body.date ?? new Date().toISOString().slice(0, 10);
@@ -119,4 +120,9 @@ export async function POST(req: NextRequest) {
   });
 
   return NextResponse.json(log, { status: 201 });
+  } catch (err) {
+    console.error("Coaching generation error:", err);
+    const message = err instanceof Error ? err.message : "Failed to generate coaching";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }

@@ -49,7 +49,7 @@ function ScoreArc({ score, label, color = "#4a7c59", size = "md" }: {
           <span className={`${dims.font} font-bold text-white`}>{score}</span>
         </div>
       </div>
-      <span className="text-[9px] tracking-[0.15em] text-[#3a3a3a] uppercase">{label}</span>
+      <span className="text-[9px] tracking-[0.15em] text-[#666] uppercase">{label}</span>
     </div>
   );
 }
@@ -58,7 +58,7 @@ function ScoreArc({ score, label, color = "#4a7c59", size = "md" }: {
 function Bar({ value, max, color = "#4a7c59" }: { value: number; max: number; color?: string }) {
   const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0;
   return (
-    <div className="h-[3px] bg-[#161616] rounded-full overflow-hidden">
+    <div className="h-[3px] bg-[#1a1a1a] rounded-full overflow-hidden">
       <div className="h-full rounded-full transition-all duration-700" style={{ width: `${pct}%`, backgroundColor: color }} />
     </div>
   );
@@ -70,18 +70,18 @@ function StatCard({ label, value, unit, sub, color, icon: Icon, progress, href }
   icon: React.ElementType; progress?: { value: number; max: number }; href?: string;
 }) {
   const content = (
-    <div className={`rounded-2xl border border-[#161616] bg-[#0c0c0c] p-4 transition-all duration-150 ${href ? "hover:border-[#252525] active:scale-[0.98]" : ""}`}>
+    <div className={`rounded-2xl border border-[#1a1a1a] bg-[#0c0c0c] p-5 transition-all duration-150 ${href ? "hover:border-[#282828] active:scale-[0.98]" : ""}`}>
       <div className="flex items-center justify-between mb-3">
-        <span className="text-[9px] tracking-[0.2em] text-[#333] uppercase">{label}</span>
+        <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase">{label}</span>
         <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ backgroundColor: `${color}14` }}>
           <Icon size={13} color={color} strokeWidth={1.5} />
         </div>
       </div>
-      <div className="flex items-baseline gap-1 mb-1">
+      <div className="flex items-baseline gap-1 mb-1.5">
         <span className="text-[28px] font-bold text-white leading-none tracking-tight">{value}</span>
-        {unit && <span className="text-xs text-[#333] font-normal">{unit}</span>}
+        {unit && <span className="text-xs text-[#666] font-normal">{unit}</span>}
       </div>
-      {sub && <p className="text-[11px] text-[#2e2e2e] mb-2">{sub}</p>}
+      {sub && <p className="text-[11px] text-[#777] mb-2.5">{sub}</p>}
       {progress && <Bar value={progress.value} max={progress.max} color={color} />}
     </div>
   );
@@ -93,15 +93,15 @@ function ActivityRow({ icon: Icon, color, label, date, meta }: {
   icon: React.ElementType; color: string; label: string; date: string; meta: string;
 }) {
   return (
-    <div className="flex items-center gap-3 py-3 border-b border-[#0f0f0f] last:border-0">
+    <div className="flex items-center gap-3 py-3.5 border-b border-[#111] last:border-0">
       <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${color}16` }}>
         <Icon size={14} color={color} strokeWidth={1.5} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-[13px] text-[#bbb] font-medium truncate">{label}</p>
-        <p className="text-[11px] text-[#2e2e2e] mt-0.5">{meta}</p>
+        <p className="text-[13px] text-[#ccc] font-medium truncate">{label}</p>
+        <p className="text-[11px] text-[#777] mt-0.5">{meta}</p>
       </div>
-      <p className="text-[11px] text-[#2a2a2a] flex-shrink-0">{date}</p>
+      <p className="text-[11px] text-[#666] flex-shrink-0">{date}</p>
     </div>
   );
 }
@@ -109,26 +109,34 @@ function ActivityRow({ icon: Icon, color, label, date, meta }: {
 // ── Generate coaching button ──
 function GenerateCoachingBtn({ date, onGenerated }: { date: string; onGenerated: (c: CoachingLog) => void }) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   async function generate() {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/coaching", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date }),
       });
       const data = await res.json();
-      if (!data.error) onGenerated(data);
+      if (data.error) setError(data.error);
+      else onGenerated(data);
+    } catch {
+      setError("Network error — please try again.");
     } finally { setLoading(false); }
   }
   return (
-    <button onClick={generate} disabled={loading}
-      className="w-full py-3 rounded-xl bg-[#4a7c59]/10 border border-[#4a7c59]/20 text-[#7ab88a] text-[13px] font-medium hover:bg-[#4a7c59]/15 active:scale-[0.98] transition-all disabled:opacity-40">
-      {loading ? (
-        <span className="flex items-center justify-center gap-2">
-          <RotateCcw size={13} className="animate-spin" /> Generating…
-        </span>
-      ) : "Generate Today's Coaching"}
-    </button>
+    <div>
+      <button onClick={generate} disabled={loading}
+        className="w-full py-3 rounded-xl bg-[#4a7c59]/10 border border-[#4a7c59]/20 text-[#7ab88a] text-[13px] font-medium hover:bg-[#4a7c59]/15 active:scale-[0.98] transition-all disabled:opacity-40">
+        {loading ? (
+          <span className="flex items-center justify-center gap-2">
+            <RotateCcw size={13} className="animate-spin" /> Generating…
+          </span>
+        ) : "Generate Today's Coaching"}
+      </button>
+      {error && <p className="text-xs text-[#f87171] mt-2 text-center">{error}</p>}
+    </div>
   );
 }
 
@@ -201,7 +209,7 @@ export default function Dashboard() {
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-screen">
-      <p className="text-[#222] text-[11px] tracking-[0.3em] uppercase animate-pulse">Loading</p>
+      <p className="text-[#666] text-[11px] tracking-[0.3em] uppercase animate-pulse">Loading</p>
     </div>
   );
 
@@ -210,18 +218,18 @@ export default function Dashboard() {
   })();
 
   return (
-    <div className="px-4 pt-6 pb-4 md:px-8 md:pt-10 max-w-4xl mx-auto">
+    <div className="px-4 pt-8 pb-6 md:px-8 md:pt-12 max-w-4xl mx-auto">
 
       {/* ── Header ── */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex items-start justify-between mb-10">
         <div>
-          <p className="text-[10px] tracking-[0.3em] text-[#3a3a3a] uppercase mb-1.5">{dateStr}</p>
+          <p className="text-[10px] tracking-[0.3em] text-[#666] uppercase mb-2">{dateStr}</p>
           <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">
             {greeting}
           </h1>
           {coaching?.focusArea && (
-            <p className="text-[12px] text-[#3a3a3a] mt-1.5">
-              Focus: <span className="text-[#7ab88a] capitalize">{coaching.focusArea}</span>
+            <p className="text-[12px] text-[#777] mt-2">
+              Today&apos;s focus: <span className="text-[#7ab88a] capitalize">{coaching.focusArea}</span>
             </p>
           )}
         </div>
@@ -234,16 +242,16 @@ export default function Dashboard() {
 
       {/* ── Coaching scores ── */}
       {coaching ? (
-        <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-5 mb-6">
-          <div className="flex items-center justify-between mb-5">
-            <p className="text-[9px] tracking-[0.25em] text-[#2e2e2e] uppercase">Coach Scores</p>
+        <div className="rounded-2xl border border-[#1a1a1a] bg-[#0c0c0c] p-6 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <p className="text-[9px] tracking-[0.25em] text-[#666] uppercase">Coach Scores</p>
             <Link href="/coaching" className="text-[11px] text-[#4a7c59] hover:text-[#7ab88a] flex items-center gap-0.5 transition-colors">
               Full report <ChevronRight size={11} />
             </Link>
           </div>
           <div className="flex items-center gap-4 md:gap-6">
             <ScoreArc score={coaching.overallScore ?? 0} label="Overall" color="#c8a96e" size="lg" />
-            <div className="w-px h-16 bg-[#161616]" />
+            <div className="w-px h-16 bg-[#1a1a1a]" />
             <div className="flex items-center gap-4 md:gap-6 flex-1">
               <ScoreArc score={coaching.runScore ?? 0} label="Run" color="#4a7c59" />
               <ScoreArc score={coaching.nutritionScore ?? 0} label="Nutrition" color="#3b82f6" />
@@ -251,9 +259,9 @@ export default function Dashboard() {
             </div>
           </div>
           {highlights.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-[#0f0f0f] space-y-1.5">
+            <div className="mt-5 pt-5 border-t border-[#111] space-y-2">
               {highlights.slice(0, 2).map((h, i) => (
-                <p key={i} className="text-[12px] text-[#444] flex items-start gap-2">
+                <p key={i} className="text-[12px] text-[#999] flex items-start gap-2">
                   <span className="text-[#4a7c59] mt-0.5 flex-shrink-0">—</span>
                   <span>{h}</span>
                 </p>
@@ -262,15 +270,15 @@ export default function Dashboard() {
           )}
         </div>
       ) : (
-        <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-5 mb-6">
-          <p className="text-[9px] tracking-[0.25em] text-[#2e2e2e] uppercase mb-3">Coach Scores</p>
-          <p className="text-[13px] text-[#333] mb-4">Get personalized coaching based on your week&apos;s training and nutrition.</p>
+        <div className="rounded-2xl border border-[#1a1a1a] bg-[#0c0c0c] p-6 mb-8">
+          <p className="text-[9px] tracking-[0.25em] text-[#666] uppercase mb-3">Coach Scores</p>
+          <p className="text-[13px] text-[#888] mb-5 leading-relaxed">Get personalized coaching based on your week&apos;s training and nutrition.</p>
           <GenerateCoachingBtn date={today} onGenerated={setCoaching} />
         </div>
       )}
 
-      {/* ── Stat grid (6 cards: 2-col mobile, 3-col tablet+) ── */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+      {/* ── Stat grid ── */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
         <StatCard
           label="Run Miles" value={weekRunMiles.toFixed(1)} unit="mi"
           sub={user?.weeklyRunMilesGoal ? `of ${user.weeklyRunMilesGoal} mi goal` : "this week"}
@@ -313,16 +321,16 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         {/* Recent activity */}
-        <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-5">
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-[9px] tracking-[0.25em] text-[#2e2e2e] uppercase">Recent Activity</p>
+        <div className="rounded-2xl border border-[#1a1a1a] bg-[#0c0c0c] p-6">
+          <div className="flex items-center justify-between mb-5">
+            <p className="text-[9px] tracking-[0.25em] text-[#666] uppercase">Recent Activity</p>
             <Link href="/runs" className="text-[11px] text-[#4a7c59] hover:text-[#7ab88a] flex items-center gap-0.5 transition-colors">
               All runs <ChevronRight size={11} />
             </Link>
           </div>
 
           {recentActivity.length === 0 ? (
-            <p className="text-[13px] text-[#222] py-4 text-center">Sync your Coros to get started.</p>
+            <p className="text-[13px] text-[#666] py-6 text-center">Sync your Coros to get started.</p>
           ) : (
             <div>
               {recentActivity.map((a, i) => {
@@ -357,8 +365,8 @@ export default function Dashboard() {
 
           {/* Mini run bar chart */}
           {weekRuns.length > 1 && (
-            <div className="mt-4 pt-4 border-t border-[#0f0f0f]">
-              <p className="text-[9px] tracking-[0.2em] text-[#222] uppercase mb-3">7-day mileage</p>
+            <div className="mt-5 pt-5 border-t border-[#111]">
+              <p className="text-[9px] tracking-[0.2em] text-[#555] uppercase mb-3">7-day mileage</p>
               <div className="flex items-end gap-1 h-8">
                 {Array.from({ length: 7 }, (_, i) => {
                   const d = new Date(Date.now() - (6 - i) * 86400000);
@@ -372,7 +380,7 @@ export default function Dashboard() {
                   const h = maxMi > 0 ? Math.max(4, (mi / maxMi) * 32) : 4;
                   return (
                     <div key={i} className="flex-1 rounded-sm transition-colors"
-                      style={{ height: h, backgroundColor: mi > 0 ? "#4a7c59" : "#111" }}
+                      style={{ height: h, backgroundColor: mi > 0 ? "#4a7c59" : "#151515" }}
                       title={mi > 0 ? `${mi.toFixed(1)} mi` : d.toLocaleDateString("en-US", { weekday: "short" })} />
                   );
                 })}
@@ -382,9 +390,9 @@ export default function Dashboard() {
         </div>
 
         {/* Coaching preview */}
-        <div className="rounded-2xl border border-[#161616] bg-[#0c0c0c] p-5">
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-[9px] tracking-[0.25em] text-[#2e2e2e] uppercase">Today&apos;s Coaching</p>
+        <div className="rounded-2xl border border-[#1a1a1a] bg-[#0c0c0c] p-6">
+          <div className="flex items-center justify-between mb-5">
+            <p className="text-[9px] tracking-[0.25em] text-[#666] uppercase">Today&apos;s Coaching</p>
             {coaching && (
               <Link href="/coaching" className="text-[11px] text-[#4a7c59] hover:text-[#7ab88a] flex items-center gap-0.5 transition-colors">
                 Full report <ChevronRight size={11} />
@@ -394,10 +402,10 @@ export default function Dashboard() {
 
           {coaching ? (
             <div>
-              <p className="text-[13px] text-[#4a4a4a] leading-relaxed line-clamp-6">
+              <p className="text-[13px] text-[#999] leading-relaxed line-clamp-6">
                 {coaching.feedback.slice(0, 380)}{coaching.feedback.length > 380 ? "…" : ""}
               </p>
-              <div className="mt-4 flex items-center gap-2 pt-4 border-t border-[#0f0f0f]">
+              <div className="mt-5 flex items-center gap-2 pt-4 border-t border-[#111]">
                 {coaching.focusArea && (
                   <span className="text-[10px] tracking-[0.15em] uppercase text-[#4a7c59] bg-[#4a7c59]/10 border border-[#4a7c59]/15 px-2 py-1 rounded-lg">
                     {coaching.focusArea}
@@ -411,7 +419,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <div>
-              <p className="text-[13px] text-[#2e2e2e] mb-5 leading-relaxed">
+              <p className="text-[13px] text-[#888] mb-5 leading-relaxed">
                 Your AI coach analyzes your runs, nutrition, and recovery to give personalized daily feedback.
               </p>
               <GenerateCoachingBtn date={today} onGenerated={setCoaching} />

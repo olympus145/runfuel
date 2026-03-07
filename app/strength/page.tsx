@@ -52,48 +52,52 @@ export default function Strength() {
     return { iso, label: d.toLocaleDateString("en-US", { weekday: "short" }), logs: dayLogs };
   });
 
-  if (loading) return <div className="flex items-center justify-center h-screen"><div className="text-[#333] text-sm tracking-widest uppercase animate-pulse">Loading</div></div>;
+  if (loading) return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="text-[#666] text-sm tracking-widest uppercase animate-pulse">Loading</div>
+    </div>
+  );
 
   return (
-    <div className="px-4 pt-6 pb-4 md:px-8 md:pt-10 max-w-4xl mx-auto">
+    <div className="px-4 pt-8 pb-6 md:px-8 md:pt-12 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
           <p className="text-[10px] tracking-[0.3em] text-[#a855f7] uppercase mb-1">Activity Log</p>
           <h2 className="text-2xl font-bold text-white">Strength & Core</h2>
         </div>
         <button onClick={() => setShowAdd(!showAdd)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#0f0f0f] text-[#555] hover:text-[#888] hover:bg-[#151515] border border-[#1a1a1a] text-sm transition-colors flex-shrink-0">
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#111] text-[#777] hover:text-[#aaa] hover:bg-[#181818] border border-[#1e1e1e] text-sm transition-colors flex-shrink-0">
           <Plus size={14} /> <span className="hidden sm:inline">Log Workout</span>
         </button>
       </div>
 
       {/* Weekly view */}
-      <div className="rounded-xl border border-[#1e1e1e] bg-[#0c0c0c] p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-[10px] tracking-[0.2em] text-[#444] uppercase">This Week</p>
-          <div className="flex items-center gap-4 text-xs text-[#555]">
-            <span><span className="text-[#a855f7]">{strengthDays}</span> strength day{strengthDays !== 1 ? "s" : ""}</span>
-            <span><span className="text-[#f97316]">{coreDays}</span> core day{coreDays !== 1 ? "s" : ""}</span>
+      <div className="rounded-xl border border-[#1a1a1a] bg-[#0c0c0c] p-6 mb-6">
+        <div className="flex items-center justify-between mb-5">
+          <p className="text-[10px] tracking-[0.2em] text-[#666] uppercase">This Week</p>
+          <div className="flex items-center gap-4 text-xs text-[#777]">
+            <span><span className="text-[#a855f7] font-semibold">{strengthDays}</span> strength day{strengthDays !== 1 ? "s" : ""}</span>
+            <span><span className="text-[#f97316] font-semibold">{coreDays}</span> core day{coreDays !== 1 ? "s" : ""}</span>
           </div>
         </div>
         <div className="grid grid-cols-7 gap-2">
           {days.map(({ iso, label, logs: dayLogs }) => (
             <div key={iso} className="text-center">
-              <p className="text-[10px] text-[#333] uppercase mb-2">{label}</p>
+              <p className="text-[10px] text-[#666] uppercase mb-2">{label}</p>
               <div className={`h-12 rounded-lg border flex flex-col items-center justify-center gap-0.5 transition-colors
-                ${dayLogs.length > 0 ? "border-[#252525] bg-[#141414]" : "border-[#111] bg-[#0a0a0a]"}`}>
+                ${dayLogs.length > 0 ? "border-[#282828] bg-[#141414]" : "border-[#141414] bg-[#0a0a0a]"}`}>
                 {dayLogs.length > 0 ? (
                   dayLogs.map((l, i) => (
                     <div key={i} className="w-2 h-2 rounded-full" style={{ backgroundColor: typeColor(l.type) }} title={typeLabel(l.type)} />
                   ))
                 ) : (
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#222]" />
                 )}
               </div>
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-4 mt-4 text-[10px] text-[#333]">
+        <div className="flex flex-wrap items-center gap-4 mt-5 text-[10px] text-[#666]">
           {TYPES.map(t => (
             <span key={t.value} className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: t.color }} />{t.label}
@@ -104,40 +108,40 @@ export default function Strength() {
 
       {/* Add form */}
       {showAdd && (
-        <div className="rounded-xl border border-[#222] bg-[#0c0c0c] p-6 mb-6">
-          <h3 className="text-sm font-medium text-[#888] mb-4">Log a Workout</h3>
+        <div className="rounded-xl border border-[#252525] bg-[#0c0c0c] p-6 mb-6">
+          <h3 className="text-sm font-medium text-[#aaa] mb-5">Log a Workout</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-            <div><label className="text-[11px] text-[#444] block mb-1">Date</label><input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} /></div>
-            <div><label className="text-[11px] text-[#444] block mb-1">Type</label>
+            <div><label className="Field-label">Date</label><input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} /></div>
+            <div><label className="Field-label">Type</label>
               <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
                 {TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
             </div>
-            <div><label className="text-[11px] text-[#444] block mb-1">Duration (min)</label><input type="number" placeholder="45" value={form.durationMin} onChange={e => setForm({ ...form, durationMin: e.target.value })} /></div>
+            <div><label className="Field-label">Duration (min)</label><input type="number" placeholder="45" value={form.durationMin} onChange={e => setForm({ ...form, durationMin: e.target.value })} /></div>
           </div>
-          <div className="mb-4"><label className="text-[11px] text-[#444] block mb-1">Notes</label><textarea rows={2} placeholder="Squats, deadlifts, bench…" value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} className="resize-none" /></div>
+          <div className="mb-5"><label className="Field-label">Notes</label><textarea rows={2} placeholder="Squats, deadlifts, bench…" value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} className="resize-none" /></div>
           <div className="flex gap-2">
             <button onClick={addLog} className="px-4 py-2 rounded-md bg-[#a855f7]/20 text-[#c084fc] hover:bg-[#a855f7]/30 border border-[#a855f7]/20 text-sm">Save Workout</button>
-            <button onClick={() => setShowAdd(false)} className="px-4 py-2 rounded-md text-[#444] hover:text-[#666] text-sm">Cancel</button>
+            <button onClick={() => setShowAdd(false)} className="px-4 py-2 rounded-md text-[#777] hover:text-[#aaa] text-sm">Cancel</button>
           </div>
         </div>
       )}
 
       {/* Log */}
       <div className="space-y-2">
-        {logs.length === 0 && <p className="text-[#333] text-sm py-8 text-center">No workouts logged yet.</p>}
+        {logs.length === 0 && <p className="text-[#666] text-sm py-10 text-center">No workouts logged yet.</p>}
         {logs.map(log => (
-          <div key={log.id} className="rounded-xl border border-[#1a1a1a] bg-[#0c0c0c] hover:border-[#252525] p-4 transition-colors flex items-center gap-4">
-            <div className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${typeColor(log.type)}18` }}>
+          <div key={log.id} className="rounded-xl border border-[#1a1a1a] bg-[#0c0c0c] hover:border-[#282828] p-4 transition-colors flex items-center gap-4">
+            <div className="w-9 h-9 rounded-md flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${typeColor(log.type)}18` }}>
               {log.type === "core" || log.type === "yoga" ? <CheckCircle size={15} color={typeColor(log.type)} /> : <Dumbbell size={15} color={typeColor(log.type)} />}
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3">
                 <span className="text-sm font-medium text-[#ccc]">{typeLabel(log.type)}</span>
-                {log.durationMin && <span className="text-xs text-[#444]">{log.durationMin}m</span>}
-                {log.notes && <span className="text-xs text-[#333] truncate max-w-xs">{log.notes}</span>}
+                {log.durationMin && <span className="text-xs text-[#777]">{log.durationMin}m</span>}
+                {log.notes && <span className="text-xs text-[#666] truncate max-w-xs">{log.notes}</span>}
               </div>
-              <p className="text-xs text-[#333] mt-0.5">{new Date(log.date).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}</p>
+              <p className="text-xs text-[#666] mt-0.5">{new Date(log.date).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}</p>
             </div>
           </div>
         ))}

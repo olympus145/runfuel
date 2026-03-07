@@ -32,7 +32,7 @@ export function Sidebar() {
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 ${
                   active
                     ? "bg-[#4a7c59]/12 text-[#7ab88a] border border-[#4a7c59]/20"
-                    : "text-[#4a4a4a] hover:text-[#888] hover:bg-[#0f0f0f] border border-transparent"
+                    : "text-[#666] hover:text-[#aaa] hover:bg-[#0f0f0f] border border-transparent"
                 }`}>
                 <Icon size={15} strokeWidth={active ? 2 : 1.5} />
                 <span className={`text-[13px] ${active ? "font-medium" : "font-normal"}`}>{label}</span>
@@ -41,7 +41,7 @@ export function Sidebar() {
           })}
         </nav>
         <div className="px-6 py-4 border-t border-[#171717]">
-          <p className="text-[9px] text-[#222] tracking-[0.2em] uppercase">Powered by Claude</p>
+          <p className="text-[9px] text-[#555] tracking-[0.2em] uppercase">Powered by Claude</p>
         </div>
       </aside>
 
@@ -54,10 +54,10 @@ export function Sidebar() {
             return (
               <Link key={href} href={href}
                 className={`flex flex-col items-center justify-center gap-[3px] flex-1 py-3 transition-all ${
-                  active ? "text-[#7ab88a]" : "text-[#383838]"
+                  active ? "text-[#7ab88a]" : "text-[#555]"
                 }`}>
                 <Icon size={21} strokeWidth={active ? 2 : 1.5} />
-                <span className={`text-[9px] tracking-[0.08em] uppercase ${active ? "text-[#7ab88a]" : "text-[#2e2e2e]"}`}>
+                <span className={`text-[9px] tracking-[0.08em] uppercase ${active ? "text-[#7ab88a]" : "text-[#555]"}`}>
                   {label}
                 </span>
               </Link>

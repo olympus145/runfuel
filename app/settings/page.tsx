@@ -72,10 +72,10 @@ export default function Settings() {
     } finally { setSyncing(false); }
   }
 
-  if (!user) return <div className="flex items-center justify-center h-screen"><div className="text-[#333] text-sm tracking-widest uppercase animate-pulse">Loading</div></div>;
+  if (!user) return <div className="flex items-center justify-center h-screen"><div className="text-[#777] text-sm tracking-widest uppercase animate-pulse">Loading</div></div>;
 
   return (
-    <div className="px-4 pt-6 pb-4 md:px-8 md:pt-10 max-w-2xl mx-auto">
+    <div className="px-4 pt-8 pb-6 md:px-8 md:pt-12 max-w-2xl mx-auto">
       <div className="mb-8">
         <p className="text-[10px] tracking-[0.3em] text-[#555] uppercase mb-1">Configuration</p>
         <h2 className="text-2xl font-bold text-white">Settings</h2>
@@ -88,7 +88,7 @@ export default function Settings() {
             {user.corosConnected ? <CheckCircle size={16} color="#4a7c59" /> : <AlertCircle size={16} color="#555" />}
             <div>
               <p className="text-sm text-[#ccc]">{user.corosConnected ? "Coros Connected" : "Not Connected"}</p>
-              <p className="text-xs text-[#444]">{user.corosConnected ? "Syncs automatically from your watch" : "Connect to auto-sync runs and rides"}</p>
+              <p className="text-xs text-[#777]">{user.corosConnected ? "Syncs automatically from your watch" : "Connect to auto-sync runs and rides"}</p>
             </div>
           </div>
           {user.corosConnected ? (
@@ -109,8 +109,8 @@ export default function Settings() {
             {syncResult}
           </p>
         )}
-        <p className="text-xs text-[#333] mt-3">
-          Register your app at <span className="text-[#444]">open.coros.com</span> and add your COROS_CLIENT_ID and COROS_CLIENT_SECRET to .env
+        <p className="text-xs text-[#777] mt-3">
+          Register your app at <span className="text-[#999]">open.coros.com</span> and add your COROS_CLIENT_ID and COROS_CLIENT_SECRET to .env
         </p>
       </Section>
 
